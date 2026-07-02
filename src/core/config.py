@@ -5,6 +5,7 @@ Configuration settings for the Databricks MCP server.
 import os
 from typing import Any, Dict, Optional
 
+
 # Import dotenv if available, but don't require it
 try:
     from dotenv import load_dotenv
@@ -26,12 +27,17 @@ class Settings(BaseSettings):
     """Base settings for the application."""
 
     # Databricks API configuration
-    DATABRICKS_HOST: str = os.environ.get("DATABRICKS_HOST", "https://example.databricks.net")
-    DATABRICKS_TOKEN: str = os.environ.get("DATABRICKS_TOKEN", "dapi_token_placeholder")
+    DATABRICKS_HOST: str = os.environ.get("DATABRICKS_HOST")
+    DATABRICKS_TOKEN: str = os.environ.get("DATABRICKS_TOKEN")
 
     # Server configuration
     SERVER_HOST: str = os.environ.get("SERVER_HOST", "0.0.0.0") 
-    SERVER_PORT: int = int(os.environ.get("SERVER_PORT", "8000"))
+    SERVER_PORT: int = int(
+        os.environ.get(
+            "PORT",
+            os.environ.get("SERVER_PORT", "8080")
+        )
+    )
     DEBUG: bool = os.environ.get("DEBUG", "False").lower() == "true"
 
     # Logging

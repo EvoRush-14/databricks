@@ -23,6 +23,10 @@ dependencies = [
     "mcp[cli]>=1.2.0",
     "httpx",
     "databricks-sdk",
+    "uvicorn",
+    "pydantic",
+    "pydantic-settings",
+    "python-dotenv"
 ]
 
 [project.optional-dependencies]

@@ -1,0 +1,15 @@
+.git
+.gitignore
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.cursor
+.vscode
+tests
+docs
+examples
+.env
+databricks_mcp.log
