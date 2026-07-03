@@ -14,15 +14,10 @@ A Model Completion Protocol (MCP) server for Databricks that provides access to 
 The Databricks MCP Server exposes the following tools:
 
 - **list_clusters**: List all Databricks clusters
-- **create_cluster**: Create a new Databricks cluster
-- **terminate_cluster**: Terminate a Databricks cluster
-- **get_cluster**: Get information about a specific Databricks cluster
-- **start_cluster**: Start a terminated Databricks cluster
 - **list_jobs**: List all Databricks jobs
 - **run_job**: Run a Databricks job
 - **list_notebooks**: List notebooks in a workspace directory
 - **export_notebook**: Export a notebook from the workspace
-- **list_files**: List files and directories in a DBFS path
 - **execute_sql**: Execute a SQL statement
 
 ## Installation
