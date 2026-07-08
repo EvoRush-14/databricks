@@ -35,4 +35,4 @@ ENV SERVER_HOST=0.0.0.0
 
 USER appuser
 
-CMD ["python", "-m", "src.server.databricks_sse_server"]
+CMD ["python", "-m", "src.server.databricks_http_server"]
