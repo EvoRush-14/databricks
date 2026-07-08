@@ -35,7 +35,6 @@ class DatabricksMCPServer(FastMCP):
     def __init__(self):
         """Initialize the Databricks MCP server."""
         super().__init__(name="databricks-mcp",
-                         version="1.0.0",
                          instructions="Use this server to manage Databricks resources")
         logger.info("Initializing Databricks MCP server")
         logger.info(f"Databricks host: {settings.DATABRICKS_HOST}")
@@ -74,15 +73,15 @@ class DatabricksMCPServer(FastMCP):
             num_workers: int = 1,
             autotermination_minutes: int = 60,
         ) -> List[TextContent]:
-            logger.info(f"Creating cluster: {cluster_name}")
+            params = {
+                "cluster_name": cluster_name,
+                "spark_version": spark_version,
+                "node_type_id": node_type_id,
+                "num_workers": num_workers,
+                "autotermination_minutes": autotermination_minutes,
+            }
+            logger.info(f"Creating cluster with params: {params}")
             try:
-                params = {
-                    "cluster_name": cluster_name,
-                    "spark_version": spark_version,
-                    "node_type_id": node_type_id,
-                    "num_workers": num_workers,
-                    "autotermination_minutes": autotermination_minutes,
-                }
                 result = await clusters.create_cluster(params)
                 return [TextContent(type="text", text=json.dumps(result))]
             except Exception as e:
@@ -153,9 +152,10 @@ class DatabricksMCPServer(FastMCP):
             job_id: str,
             notebook_params: Optional[Dict[str, Any]] = None,
         ) -> List[TextContent]:
-            logger.info(f"Running job: {job_id}")
+            notebook_params = notebook_params or {}
+            logger.info(f"Running job {job_id} with notebook_params: {notebook_params}")
             try:
-                result = await jobs.run_job(job_id, notebook_params or {})
+                result = await jobs.run_job(job_id, notebook_params)
                 return [TextContent(type="text", text=json.dumps(result))]
             except Exception as e:
                 logger.error(f"Error running job: {str(e)}")
@@ -180,13 +180,13 @@ class DatabricksMCPServer(FastMCP):
 
         @self.tool(
             name="export_notebook",
-            description="Export a notebook from the workspace. format must be one of: SOURCE, HTML, JUPYTER, DBC",
+            description="Export a notebook from the workspace. Format must be one of: SOURCE, HTML, JUPYTER, DBC",
         )
         async def export_notebook(
             path: str,
             format: str = "SOURCE",
         ) -> List[TextContent]:
-            logger.info(f"Exporting notebook at path: {path}")
+            logger.info(f"Exporting notebook at path: {path} format: {format}")
             try:
                 result = await notebooks.export_notebook(path, format)
 
@@ -232,7 +232,10 @@ class DatabricksMCPServer(FastMCP):
             catalog: Optional[str] = None,
             schema: Optional[str] = None,
         ) -> List[TextContent]:
-            logger.info(f"Executing SQL on warehouse: {warehouse_id}")
+            logger.info(
+                f"Executing SQL statement on warehouse {warehouse_id} "
+                f"(catalog={catalog}, schema={schema})"
+            )
             try:
                 result = await sql.execute_sql(statement, warehouse_id, catalog, schema)
                 return [TextContent(type="text", text=json.dumps(result))]
