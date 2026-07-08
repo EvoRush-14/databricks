@@ -20,7 +20,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "mcp[cli]>=1.2.0",
+    "mcp[cli]>=1.9.0",
     "httpx",
     "databricks-sdk",
     "uvicorn",
@@ -44,4 +44,4 @@ dev = [
 databricks-mcp = "src.cli.commands:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src"] 
+packages = ["src"]
