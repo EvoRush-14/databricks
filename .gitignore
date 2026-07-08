@@ -38,7 +38,6 @@ temp/
 
 # uv package manager files
 .uv/
-uv.lock
 
 # Databricks-specific
 *.dbfs
