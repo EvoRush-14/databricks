@@ -14,6 +14,7 @@ import os
 from typing import Any, Dict, List, Optional, Union, cast
 
 from mcp.server import FastMCP
+from mcp.server.transport_security import TransportSecuritySettings
 from mcp.types import TextContent
 from mcp.server.stdio import stdio_server
 
@@ -34,10 +35,24 @@ class DatabricksMCPServer(FastMCP):
 
     def __init__(self):
         """Initialize the Databricks MCP server."""
-        super().__init__(name="databricks-mcp",
-                         instructions="Use this server to manage Databricks resources")
+        allowed_hosts = settings.ALLOWED_HOSTS
+        allowed_origins = settings.ALLOWED_ORIGINS
+
+        transport_security = TransportSecuritySettings(
+            enable_dns_rebinding_protection=True,
+            allowed_hosts=allowed_hosts,
+            allowed_origins=allowed_origins,
+        )
+
+        super().__init__(
+            name="databricks-mcp",
+            instructions="Use this server to manage Databricks resources",
+            transport_security=transport_security,
+        )
         logger.info("Initializing Databricks MCP server")
         logger.info(f"Databricks host: {settings.DATABRICKS_HOST}")
+        logger.info(f"Allowed hosts for transport security: {allowed_hosts}")
+        logger.info(f"Allowed origins for transport security: {allowed_origins}")
 
         # Register tools
         self._register_tools()

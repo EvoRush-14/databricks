@@ -39,6 +39,22 @@ class Settings(BaseSettings):
         )
     )
     DEBUG: bool = os.environ.get("DEBUG", "False").lower() == "true"
+    ALLOWED_HOSTS: list[str] = [
+        h.strip()
+        for h in os.environ.get(
+            "ALLOWED_HOSTS",
+            "rg-databricksmcp-238017122334.us-central1.run.app,localhost,127.0.0.1"
+        ).split(",")
+        if h.strip()
+    ]
+    ALLOWED_ORIGINS: list[str] = [
+        o.strip()
+        for o in os.environ.get(
+            "ALLOWED_ORIGINS",
+            "https://rg-databricksmcp-238017122334.us-central1.run.app"
+        ).split(",")
+        if o.strip()
+    ]
 
     # Logging
     LOG_LEVEL: str = os.environ.get("LOG_LEVEL", "INFO")
