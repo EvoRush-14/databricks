@@ -43,6 +43,7 @@ async def main():
     server.settings.host = settings.SERVER_HOST
     server.settings.port = settings.SERVER_PORT
     server.settings.debug = settings.DEBUG
+    server.settings.streamable_http_path = "/sse"
 
     # FastMCP defaults the Streamable HTTP path to "/mcp".
     # Leaving this as default matches what Gemini Enterprise expects
