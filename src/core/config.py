@@ -40,6 +40,27 @@ class Settings(BaseSettings):
     )
     DEBUG: bool = os.environ.get("DEBUG", "False").lower() == "true"
 
+    # Hosts/origins allowed to call the Streamable HTTP MCP endpoint
+    # (DNS rebinding protection). Comma-separated env vars, e.g.:
+    #   ALLOWED_HOSTS=rg-databricksmcp-238017122334.us-central1.run.app
+    #   ALLOWED_ORIGINS=https://rg-databricksmcp-238017122334.us-central1.run.app
+    ALLOWED_HOSTS: list[str] = [
+        h.strip()
+        for h in os.environ.get(
+            "ALLOWED_HOSTS",
+            "rg-databricksmcp-238017122334.us-central1.run.app,localhost,127.0.0.1"
+        ).split(",")
+        if h.strip()
+    ]
+    ALLOWED_ORIGINS: list[str] = [
+        o.strip()
+        for o in os.environ.get(
+            "ALLOWED_ORIGINS",
+            "https://rg-databricksmcp-238017122334.us-central1.run.app"
+        ).split(",")
+        if o.strip()
+    ]
+
     # Logging
     LOG_LEVEL: str = os.environ.get("LOG_LEVEL", "INFO")
     
@@ -89,4 +110,4 @@ def get_databricks_api_url(endpoint: str) -> str:
     # Remove trailing slash from host if present
     host = settings.DATABRICKS_HOST.rstrip("/")
     
-    return f"{host}{endpoint}" 
+    return f"{host}{endpoint}"
